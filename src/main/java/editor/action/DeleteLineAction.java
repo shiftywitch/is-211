@@ -7,23 +7,24 @@ package editor.action;
 
 import editor.Document;
 import editor.Editor;
-
 import java.awt.event.ActionEvent;
 
 /**
+ * This is an example of an action class. You will have to add more.
+ * They should call one of the editing methods in the document.
  *
  * @author evenal
  */
-public class DelPrev extends EditorAction {
+public class DeleteLineAction extends EditorAction {
 
-    public DelPrev(String name, Editor ed) {
+    public DeleteLineAction(String name, Editor ed) {
         super(name, ed);
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
         Document doc = editor.getDocument();
-        doc.deletePrev();
+        doc.insert('\n');
         doc.print();
     }
 }

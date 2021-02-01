@@ -7,16 +7,15 @@ package editor.action;
 
 import editor.Document;
 import editor.Editor;
-
 import java.awt.event.ActionEvent;
 
 /**
  *
  * @author evenal
  */
-public class DelNext extends EditorAction {
+public class DeleteNextAction extends EditorAction {
 
-    public DelNext(String name, Editor ed) {
+    public DeleteNextAction(String name, Editor ed) {
         super(name, ed);
     }
 

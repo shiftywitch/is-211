@@ -10,22 +10,20 @@ import editor.Editor;
 import java.awt.event.ActionEvent;
 
 /**
- * This is an example of an action class. You will have to add more.
- * They should call one of the editing methods in the document.
+ * This action breaks a line. It is bound to the enter key
  *
  * @author evenal
  */
-public class InsertAction extends EditorAction {
+public class InsertLineaction extends EditorAction {
 
-    public InsertAction(String name, Editor ed) {
+    public InsertLineaction(String name, Editor ed) {
         super(name, ed);
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
         Document doc = editor.getDocument();
-        char ch = ae.getActionCommand().charAt(0);
-        doc.insert(ch);
+        doc.insertLine();
         doc.print();
     }
 }

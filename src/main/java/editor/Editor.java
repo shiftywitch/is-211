@@ -5,14 +5,22 @@
  */
 package editor;
 
+import editor.action.ArrowKeyAction;
 import editor.action.EditorAction;
 import editor.action.InsertAction;
 import editor.display.CharacterDisplay;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 
 /**
  * Editor is the main class of the editor application. It is mainly
@@ -84,12 +92,19 @@ public class Editor extends JFrame {
      * @param keyStroke key to bind
      * @param action action to bind the key to
      */
-    public void addKeyMapping(char c,
-                              String name,
+    public void addKeyMapping(KeyStroke keyStroke,
                               EditorAction action) {
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(c);
         inputMap.put(keyStroke, action.getName());
         actionMap.put(action.getName(), action);
+    }
+
+    public void addKeyMapRange(char min,
+                               char max,
+                               EditorAction action) {
+        for (char c = min; c <= max; c++) {
+            KeyStroke keyStroke = KeyStroke.getKeyStroke(c);
+            addKeyMapping(keyStroke, action);
+        }
     }
 
     public void addKeyMappings() {
@@ -98,16 +113,22 @@ public class Editor extends JFrame {
         String name = "insertChar";
         EditorAction action = new InsertAction(name,
                                                this);
-        for (char ch = 'a'; ch <= 'z'; ch++) {
-            addKeyMapping(ch, name, action);
-        }
-        for (char c = 'A'; c <= 'Z'; c++) {
-            addKeyMapping(c, name, action);
-        }
-        for (var c : "., ()æøåÆØÅ".toCharArray()) {
-            addKeyMapping(c, name, action);
-        }
+        addKeyMapRange('a', 'z', action);
+        addKeyMapRange('A', 'Z', action);
+        addKeyMapRange('0', '9', action);
 
+        for (var c : "., ()æøåÆØÅ".toCharArray()) {
+            KeyStroke keyStroke = KeyStroke.getKeyStroke(c);
+            addKeyMapping(keyStroke, action);
+        }
+        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0),
+                      new ArrowKeyAction("UP", "moveCursor", this));
+        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0),
+                      new ArrowKeyAction("DOWN", "moveCursor", this));
+        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
+                      new ArrowKeyAction("LEFT", "moveCursor", this));
+        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0),
+                      new ArrowKeyAction("RIGHT", "moveCursor", this));
     }
 
     public CharacterDisplay getDisplay() {

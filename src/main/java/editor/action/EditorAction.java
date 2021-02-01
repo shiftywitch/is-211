@@ -6,8 +6,7 @@
 package editor.action;
 
 import editor.Editor;
-
-import javax.swing.*;
+import javax.swing.AbstractAction;
 
 /**
  *
