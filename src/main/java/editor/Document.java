@@ -17,12 +17,14 @@ import editor.display.CharacterDisplay;
 public class Document {
 
     LineNode firstLine;
+    LineNode lineSelected;
     CharacterDisplay display;
 
     public Document(CharacterDisplay display) {
         //set up data structure
 
         firstLine = new LineNode();
+        lineSelected = firstLine;
         this.display = display;
     }
 
@@ -37,12 +39,12 @@ public class Document {
      * methods
      */
     public void insertLine() {
-        // create a new line in the data structure
         updateDisplay();
     }
 
     public void insert(Character c) {
         firstLine.addCharacter(c);
+        updateDisplay();
     }
 
     public void deleteNext() {
@@ -50,14 +52,16 @@ public class Document {
 
     public void deletePrev() {
         firstLine.deleteCharacter();
+        updateDisplay();
     }
 
     public void moveCursor(String direction) {
         System.out.println(direction);
+        updateDisplay();
     }
 
     public void print(){
-        firstLine.print();
+        lineSelected.print();
     }
 
     /**
@@ -75,6 +79,8 @@ public class Document {
         CharNode cursor;
         CharNode front;
         CharNode end;
+        LineNode prev;
+        LineNode next;
 
         private LineNode() {
             front = new CharNode();
@@ -83,19 +89,16 @@ public class Document {
             front.prev = front;
             end.prev = front;
             cursor = front;
-
         }
 
         private void addCharacter(char character) {
             CharNode newCharacter;
-            newCharacter = new CharNode(character, cursor.next, cursor.prev);
-            cursor.prev.next = newCharacter;
-            cursor.next.prev = newCharacter;
-
-            cursor = newCharacter;
+            newCharacter = new CharNode(character, cursor.next, cursor);
+            cursor.next = newCharacter;
+            newCharacter.next.prev = newCharacter;
+            cursor = cursor.next;
 
         }
-
 
         private void deleteCharacter() {
             if (cursor != front) {
@@ -116,6 +119,10 @@ public class Document {
         }
     }
 
+    /**
+     * The charNode class represents the characters in a line.
+     * The characters or CharNodes are connected with each other by referencing to previous and next characters/charNodes.
+     */
     private class CharNode {
         char data;
         CharNode prev;
