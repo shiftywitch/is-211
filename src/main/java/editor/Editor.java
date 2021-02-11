@@ -133,6 +133,8 @@ public class Editor extends JFrame {
                       new ArrowKeyAction("ENTER", "newLine", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0),
                       new ArrowKeyAction("BACKSPACE", "backspace", this));
+        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+                      new ArrowKeyAction("DELETE", "delete", this));
     }
 
     public CharacterDisplay getDisplay() {
