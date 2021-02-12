@@ -14,9 +14,9 @@ import java.awt.event.ActionEvent;
  *
  * @author evenal
  */
-public class InsertLineaction extends EditorAction {
+public class InsertLineAction extends EditorAction {
 
-    public InsertLineaction(String name, Editor ed) {
+    public InsertLineAction(String name, Editor ed) {
         super(name, ed);
     }
 
