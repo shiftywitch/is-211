@@ -39,11 +39,17 @@ public class Document {
      * methods
      */
     public void insertLine() {
+        LineNode newLine = new LineNode(lineSelected, lineSelected.next);
+        lineSelected.next = newLine;
+        if (newLine.next != null) {
+            newLine.next.prev = newLine;
+        }
+        lineSelected = newLine;
         updateDisplay();
     }
 
     public void insert(Character c) {
-        firstLine.addCharacter(c);
+        lineSelected.addCharacter(c);
         updateDisplay();
     }
 
@@ -51,7 +57,7 @@ public class Document {
     }
 
     public void deletePrev() {
-        firstLine.deleteCharacter();
+        lineSelected.deleteCharacter();
         updateDisplay();
     }
 
@@ -64,16 +70,7 @@ public class Document {
         lineSelected.print();
     }
 
-    /**
-    private void updateDisplay(int line) {
-        // for all visible characterso
-        // show them in the rightplace
-        display.displayChar(c, line, column);
 
-        // and make the cursor stand out a little
-        display.displayCursor(c, line, column);
-    }
-     **/
 
     private class LineNode {
         CharNode cursor;
@@ -83,6 +80,16 @@ public class Document {
         LineNode next;
 
         private LineNode() {
+            lineStart();
+        }
+
+        private LineNode(LineNode prev, LineNode next) {
+            this.prev = prev;
+            this.next = next;
+            lineStart();
+        }
+
+        private void lineStart() {
             front = new CharNode();
             end = new CharNode();
             front.next = end;
@@ -93,7 +100,7 @@ public class Document {
 
         private void addCharacter(char character) {
             CharNode newCharacter;
-            newCharacter = new CharNode(character, cursor.next, cursor);
+            newCharacter = new CharNode(character, cursor, cursor.next);
             cursor.next = newCharacter;
             newCharacter.next.prev = newCharacter;
             cursor = cursor.next;
@@ -134,7 +141,7 @@ public class Document {
             next = null;
         }
 
-        private CharNode(char character, CharNode next, CharNode prev) {
+        private CharNode(char character, CharNode prev, CharNode next) {
             data = character;
             this.prev = prev;
             this.next = next;
