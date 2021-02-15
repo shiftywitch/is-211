@@ -1,0 +1,14 @@
+We chose two doubly linked-lists as our data structures in this assignment. One for the characters and another one for
+the lines (CharNode and LineNode classes). So a document object can contain several lines who are linked to each other,
+and each line contains several characters who are linked to each other.
+
+The reason why we chose the doubly linked-list is because of the tasks of a text editor. You usually insert or delete
+one character at the time, and with a doubly linked-list it will take in the worst case O(1) time no mather where the
+cursor is. The same goes for making a new line, deleting it, moving the cursor.
+This is because in a linked-list you only need to manipulate the previous, next and current node. While in
+for example an ArrayList, when you insert or delete an element the indexes of the following n elements have to be
+changed.
+
+This is a simple application, there is no implementation yet of a functionality for searching in the document.
+That would take 0(n) time. This application prints each character of each line which takes 0(n^2), something we do
+believe could be changed by implementing a better way for presenting the text.
