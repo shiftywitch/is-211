@@ -17,6 +17,7 @@ import editor.display.CharacterDisplay;
 public class Document {
 
     LineNode firstLine;
+    LineNode lineHolder;
     LineNode lineSelected;
     CharacterDisplay display;
 
@@ -24,6 +25,10 @@ public class Document {
         //set up data structure
 
         firstLine = new LineNode();
+        lineHolder = new LineNode();
+        firstLine.next = lineHolder;
+        firstLine.prev = firstLine;
+        lineHolder.prev = firstLine;
         lineSelected = firstLine;
         this.display = display;
     }
@@ -57,7 +62,7 @@ public class Document {
     }
 
     public void deletePrev() {
-        lineSelected.deleteCharacter();
+        lineSelected.deletePrev();
         updateDisplay();
     }
 
@@ -67,7 +72,11 @@ public class Document {
     }
 
     public void print(){
-        lineSelected.print();
+        LineNode n = firstLine;
+        while (n.next != null) {
+            n.print();
+            n = n.next;
+        }
     }
 
 
@@ -99,15 +108,14 @@ public class Document {
         }
 
         private void addCharacter(char character) {
-            CharNode newCharacter;
-            newCharacter = new CharNode(character, cursor, cursor.next);
+            CharNode newCharacter = new CharNode(character, cursor, cursor.next);
             cursor.next = newCharacter;
             newCharacter.next.prev = newCharacter;
             cursor = cursor.next;
 
         }
 
-        private void deleteCharacter() {
+        private void deletePrev() {
             if (cursor != front) {
                 cursor.prev.next = cursor.next;
                 cursor.next.prev = cursor.prev;
