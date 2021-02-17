@@ -5,7 +5,9 @@
  */
 package editor;
 
-import editor.action.*;
+import editor.action.ArrowKeyAction;
+import editor.action.EditorAction;
+import editor.action.InsertAction;
 import editor.display.CharacterDisplay;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -62,7 +64,7 @@ public class Editor extends JFrame {
         contentPane.setLayout(new BorderLayout());
         contentPane.add(display, BorderLayout.CENTER);
 
-        /*
+        /**
          * The inputMap and actionMap determine what happens when the
          * user presses a key on the keyboard. The keys are not
          * hard-coded to the actions. The keyboard is
@@ -120,17 +122,19 @@ public class Editor extends JFrame {
             addKeyMapping(keyStroke, action);
         }
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0),
-                      new ArrowKeyAction("UP", "moveCursorUp", this));
+                      new ArrowKeyAction("UP", "moveCursor", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0),
-                      new ArrowKeyAction("DOWN", "moveCursorDown", this));
+                      new ArrowKeyAction("DOWN", "moveCursor", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
-                      new ArrowKeyAction("LEFT", "moveCursorLeft", this));
+                      new ArrowKeyAction("LEFT", "moveCursor", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0),
-                      new ArrowKeyAction("RIGHT", "moveCursorRight", this));
-        addKeyMapping(KeyStroke.getKeyStroke('\n'),
-                      new InsertLineAction("enter", this));
+                      new ArrowKeyAction("RIGHT", "moveCursor", this));
+        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+                      new ArrowKeyAction("ENTER", "newLine", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0),
-                      new DeletePrevAction("backspace", this));
+                      new ArrowKeyAction("BACKSPACE", "backspace", this));
+        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+                      new ArrowKeyAction("DELETE", "delete", this));
     }
 
     public CharacterDisplay getDisplay() {
