@@ -67,7 +67,20 @@ public class Document {
     }
 
     public void moveCursor(String direction) {
-        System.out.println(direction);
+        switch (direction) {
+            case "RIGHT":
+            case "LEFT":
+                lineSelected.moveCursor(direction);
+                break;
+            case "UP":
+                lineSelected = lineSelected.prev;
+                break;
+            case "DOWN":
+                if (lineSelected.next != null) {
+                    lineSelected = lineSelected.next;
+                }
+                break;
+        }
         updateDisplay();
     }
 
@@ -113,6 +126,19 @@ public class Document {
             newCharacter.next.prev = newCharacter;
             cursor = cursor.next;
 
+        }
+
+        private void moveCursor(String direction) {
+            switch(direction) {
+                case "LEFT":
+                    cursor = cursor.prev;
+                    break;
+                case "RIGHT":
+                    if (cursor.next != null) {
+                        cursor = cursor.next;
+                    }
+                    break;
+            }
         }
 
         private void deletePrev() {
