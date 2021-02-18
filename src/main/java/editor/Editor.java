@@ -5,9 +5,7 @@
  */
 package editor;
 
-import editor.action.ArrowKeyAction;
-import editor.action.EditorAction;
-import editor.action.InsertAction;
+import editor.action.*;
 import editor.display.CharacterDisplay;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -64,7 +62,7 @@ public class Editor extends JFrame {
         contentPane.setLayout(new BorderLayout());
         contentPane.add(display, BorderLayout.CENTER);
 
-        /**
+        /*
          * The inputMap and actionMap determine what happens when the
          * user presses a key on the keyboard. The keys are not
          * hard-coded to the actions. The keyboard is
@@ -122,17 +120,17 @@ public class Editor extends JFrame {
             addKeyMapping(keyStroke, action);
         }
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0),
-                      new ArrowKeyAction("UP", "moveCursor", this));
+                      new ArrowKeyAction("UP", "moveCursorUp", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0),
-                      new ArrowKeyAction("DOWN", "moveCursor", this));
+                      new ArrowKeyAction("DOWN", "moveCursorDown", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
-                      new ArrowKeyAction("LEFT", "moveCursor", this));
+                      new ArrowKeyAction("LEFT", "moveCursorLeft", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0),
-                      new ArrowKeyAction("RIGHT", "moveCursor", this));
-        addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
-                      new ArrowKeyAction("ENTER", "newLine", this));
+                      new ArrowKeyAction("RIGHT", "moveCursorRight", this));
+        addKeyMapping(KeyStroke.getKeyStroke('\n'),
+                      new InsertLineAction("enter", this));
         addKeyMapping(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0),
-                      new ArrowKeyAction("BACKSPACE", "backspace", this));
+                      new DeletePrevAction("backspace", this));
     }
 
     public CharacterDisplay getDisplay() {

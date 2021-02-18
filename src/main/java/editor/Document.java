@@ -16,171 +16,183 @@ import editor.display.CharacterDisplay;
 
 public class Document {
 
-    /** The doc is a list of lines */
-    Line sentinel;
-    Line currentLine;
-    Line firstVisible;
-
+    LineNode firstLine;
+    LineNode lineHolder;
+    LineNode lineSelected;
     CharacterDisplay display;
 
     public Document(CharacterDisplay display) {
-        sentinel = new Line();
-        currentLine = new Line();
-        firstVisible = currentLine;
-        sentinel.next = currentLine;
-        currentLine.next = sentinel;
-        sentinel.prev = currentLine;
-        currentLine.prev = sentinel;
+        //sets up data structure for the lineNodes (lines).
 
+        firstLine = new LineNode();
+        lineHolder = new LineNode();
+        firstLine.next = lineHolder;
+        firstLine.prev = firstLine;
+        lineHolder.prev = firstLine;
+        lineSelected = firstLine;
         this.display = display;
     }
 
-    public void print() {
-        for (Line line = sentinel.next;
-             line != sentinel;
-             line = line.next) {
-            line.print();
-        }
-    }
-
     private void updateDisplay() {
-        int lineCount = 0;
-
-        for (Line line = firstVisible;
-             line != sentinel
-                     && lineCount < display.getHeight();
-             line = line.next) {
-            lineCount++;
-            line.updateDisplay(lineCount);
-        }
+        // should be called at the end of the functionality
+        // and should update the display
     }
 
+    /*
+     * The following methods are called from the actions. Decide on
+     * the data structure(s) for Document first. Then finish these
+     * methods
+     */
     public void insertLine() {
-
+        LineNode newLine = new LineNode(lineSelected, lineSelected.next);
+        lineSelected.next = newLine;
+        if (newLine.next != null) {
+            newLine.next.prev = newLine;
+        }
+        lineSelected = newLine;
+        updateDisplay();
     }
 
     public void insert(Character c) {
-        currentLine.insert(c);
+        lineSelected.addCharacter(c);
+        updateDisplay();
+    }
+
+    public void deleteNext() {
+    }
+
+    public void deletePrev() {
+        lineSelected.deletePrev();
         updateDisplay();
     }
 
     public void moveCursor(String direction) {
-
+        switch (direction) {
+            case "RIGHT":
+            case "LEFT":
+                lineSelected.moveCursor(direction);
+                break;
+            case "UP":
+                lineSelected = lineSelected.prev;
+                break;
+            case "DOWN":
+                if (lineSelected.next != null) {
+                    lineSelected = lineSelected.next;
+                }
+                break;
+        }
+        updateDisplay();
     }
 
-    public void deleteNext() {
-        currentLine.deleteNext();
+    public void print(){
+        LineNode n = firstLine;
+        while (n.next != null) {
+            n.print();
+            n = n.next;
+        }
     }
 
-    public void deletePrev() {
-        currentLine.deletePrev();
-
-    }
 
     /**
-     * There is one instance of this class for every character in the
-     * buffer. Each Line object contains a double linked list of
-     * CharNodes (using the prev and next pointers in this class
+     * This class represents the lines.
+     * It holds the data structure for the characters and defines a start, end and cursor in the lines.
+     * It have methods for deleting and inserting characters, moving the cursor left and right and printing the line
+     * which iterate through the doubly linked list of charNodes.
      */
-    private class CharNode {
+    private class LineNode {
+        CharNode cursor;
+        CharNode front;
+        CharNode end;
+        LineNode prev;
+        LineNode next;
 
-        CharNode prev, next;
-        char c;
-
-        public CharNode() {
-            c = 0;
-            prev = this;
-            next = this;
+        private LineNode() {
+            lineStart();
         }
 
-        public CharNode(char c,
-                        CharNode prev,
-                        CharNode next) {
-            this.c = c;
+        /**
+         * The idea behind this constructor is if one makes a lines between some other lines it link it with them.
+         * Then continuous with setting up the data structure for the charNodes.
+         * @param prev
+         * @param next
+         */
+        private LineNode(LineNode prev, LineNode next) {
             this.prev = prev;
             this.next = next;
+            this.prev.next = this;
+            this.next.prev = this;
+            lineStart();
         }
 
-        public void insert(char c) {
-            CharNode n = new CharNode(c, this, next);
-            this.next = n;
-            n.next.prev = n;
+        private void lineStart() {
+            front = new CharNode();
+            end = new CharNode();
+            front.next = end;
+            front.prev = front;
+            end.prev = front;
+            cursor = front;
         }
 
-        private void deletePrev() {
-            if (prev == currentLine.sentinel) {
-                // careful....
-            }
-            else {
-                prev = prev.prev;
-                prev.next = this;
-            }
-        }
-
-        private void deleteNext() {
-
-        }
-    }
-
-    /**
-     * Each Line object contains a double linked list of CharNode
-     * objects, which hold the characters in the line.
-     *
-     * One of the lines contains the cursor. Logically the cursor is
-     * always between two characters. This is not possible, so the
-     * cursor field points to the character (CharNode object) just
-     * behind the cursor. Characters are always inserted between the
-     * cursor and the next node.
-     */
-    private class Line {
-
-        CharNode sentinel;
-        CharNode cursor;
-        Line prev;
-        Line next;
-
-        public Line() {
-            sentinel = new CharNode();
-            cursor = sentinel;
-            prev = this;
-            next = this;
-        }
-
-        private void insert(char c) {
-            assert cursor != null;
-            cursor.insert(c);
+        private void addCharacter(char character) {
+            CharNode newCharacter = new CharNode(character, cursor, cursor.next);
+            cursor.next = newCharacter;
+            newCharacter.next.prev = newCharacter;
             cursor = cursor.next;
+
+        }
+
+        private void moveCursor(String direction) {
+            switch(direction) {
+                case "LEFT":
+                    cursor = cursor.prev;
+                    break;
+                case "RIGHT":
+                    if (cursor.next != null) {
+                        cursor = cursor.next;
+                    }
+                    break;
+            }
         }
 
         private void deletePrev() {
-            cursor.deletePrev();
-        }
-
-        private void deleteNext() {
-            cursor.deleteNext();
+            if (cursor != front) {
+                cursor.prev.next = cursor.next;
+                cursor.next.prev = cursor.prev;
+                cursor = cursor.prev;
+            }
         }
 
         private void print() {
-            for (CharNode cn = sentinel.next;
-                 cn != sentinel;
-                 cn = cn.next) {
-                System.out.format("%c", cn.c);
+            StringBuilder sb = new StringBuilder();
+            CharNode n = front;
+            while (n.next != null) {
+                sb.append(n.data);
+                n = n.next;
             }
-        }
-
-        private void updateDisplay(int line) {
-            int col = 0;
-            for (CharNode cn = sentinel.next;
-                 cn != sentinel;
-                 cn = cn.next) {
-                if (cn == cursor)
-                    display.displayCursor(cn.c, line, col);
-                else
-                    display.displayChar(cn.c, line, col);
-                col++;
-            }
+            System.out.println(sb.toString());
         }
     }
 
+    /**
+     * The charNode class represents the characters in a line.
+     * The characters or CharNodes are connected with each other by referencing to previous and next characters/charNodes.
+     */
+    private class CharNode {
+        char data;
+        CharNode prev;
+        CharNode next;
+
+        private CharNode() {
+            data = 0;
+            prev = null;
+            next = null;
+        }
+
+        private CharNode(char character, CharNode prev, CharNode next) {
+            data = character;
+            this.prev = prev;
+            this.next = next;
+        }
+    }
 }
 
