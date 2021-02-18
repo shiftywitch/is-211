@@ -7,7 +7,7 @@ and each line contains several characters who are linked to each other.
 
 The reason why we chose the doubly linked-list is because of the tasks of a text editor. You usually insert or delete
 one character at the time, and with a doubly linked-list it will take in the worst case O(1) time no matter where the
-cursor is. The same goes for making a new line, deleting it, moving the cursor.
+cursor is. The same goes for making a new line, deleting it, moving the cursor one step.
 This is because in a linked-list you only need to manipulate the previous, next and current node. While in
 for example an ArrayList, when you insert or delete an element the indexes of the following n elements have to be
 changed.
