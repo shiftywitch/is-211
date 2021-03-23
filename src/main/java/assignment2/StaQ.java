@@ -10,11 +10,11 @@ public class StaQ {
         }
 
 
-        System.out.println(stackQueue.stackPop().getContent());
-        System.out.println(stackQueue.queuePop().getContent());
-        System.out.println(stackQueue.stackPop().getContent());
-        System.out.println(stackQueue.stackPop().getContent());
-        System.out.println(stackQueue.queuePop().getContent());
+        System.out.println("stackPop() -> " + stackQueue.stackPop().getContent());
+        System.out.println("queuePop() -> " + stackQueue.queuePop().getContent());
+        System.out.println("stackPop() -> " + stackQueue.stackPop().getContent());
+        System.out.println("stackPop() -> " + stackQueue.stackPop().getContent());
+        System.out.println("queuePop() -> " + stackQueue.queuePop().getContent());
     }
 
     Node front;
