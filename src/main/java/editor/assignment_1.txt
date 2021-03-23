@@ -1,10 +1,13 @@
+## Mandatory 1 - Text Editor ##
+## by Johannes Birkeland & Kjartan Erland ##
+
 We chose two doubly linked-lists as our data structures in this assignment. One for the characters and another one for
 the lines (CharNode and LineNode classes). So a document object can contain several lines who are linked to each other,
 and each line contains several characters who are linked to each other.
 
 The reason why we chose the doubly linked-list is because of the tasks of a text editor. You usually insert or delete
-one character at the time, and with a doubly linked-list it will take in the worst case O(1) time no mather where the
-cursor is. The same goes for making a new line, deleting it, moving the cursor.
+one character at the time, and with a doubly linked-list it will take in the worst case O(1) time no matter where the
+cursor is. The same goes for making a new line, deleting it, moving the cursor one step.
 This is because in a linked-list you only need to manipulate the previous, next and current node. While in
 for example an ArrayList, when you insert or delete an element the indexes of the following n elements have to be
 changed.
@@ -12,3 +15,12 @@ changed.
 This is a simple application, there is no implementation yet of a functionality for searching in the document.
 That would take 0(n) time. This application prints each character of each line which takes 0(n^2), something we do
 believe could be changed by implementing a better way for presenting the text.
+We have not implemented the GUI. The text does not get represented in the box that pops up when you run the application.
+Instead it gets printed in the terminal. When you inserts a new character, deletes one or make a new line, it will print
+out all your lines.
+
+We have tried to make the arrow keys work, but there is something that is not functioning, even though IntelliJ and
+online sources points to the same VK_(UP/DOWN/LEFT/RIGHT) "method". All other key inputs (alphabet,
+space, enter and backspace) works. We do not know if its because arrow keys are represented with hex values.
+We hoped we could use a keylistener instead of key bindings for arrow keys but that also did not work.
+

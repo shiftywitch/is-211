@@ -22,7 +22,7 @@ public class Document {
     CharacterDisplay display;
 
     public Document(CharacterDisplay display) {
-        //set up data structure
+        //sets up data structure for the lineNodes (lines).
 
         firstLine = new LineNode();
         lineHolder = new LineNode();
@@ -93,7 +93,12 @@ public class Document {
     }
 
 
-
+    /**
+     * This class represents the lines.
+     * It holds the data structure for the characters and defines a start, end and cursor in the lines.
+     * It have methods for deleting and inserting characters, moving the cursor left and right and printing the line
+     * which iterate through the doubly linked list of charNodes.
+     */
     private class LineNode {
         CharNode cursor;
         CharNode front;
@@ -105,9 +110,17 @@ public class Document {
             lineStart();
         }
 
+        /**
+         * The idea behind this constructor is if one makes a lines between some other lines it link it with them.
+         * Then continuous with setting up the data structure for the charNodes.
+         * @param prev
+         * @param next
+         */
         private LineNode(LineNode prev, LineNode next) {
             this.prev = prev;
             this.next = next;
+            this.prev.next = this;
+            this.next.prev = this;
             lineStart();
         }
 
